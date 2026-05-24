@@ -1,0 +1,934 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Mere Boxing Academy · Gijón</title>
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body, main, header, section, footer {
+            width: 100%;
+            max-width: 100%;
+        }
+        body {
+            background: #0d0b0a;
+            color: #efeae3;
+            font-family: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        img, svg {
+            display: block;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        /* ===== CUSTOM PROPS ===== */
+        :root {
+            --bg-deep: #0d0b0a;
+            --bg-card: #1a1513;
+            --cream: #efeae3;
+            --chocolate: #4d2e1b;
+            --chocolate-light: #7a4f2e;
+            --hot-red: #e63946;
+            --cyan-acid: #00e5c8;
+            --orange-burst: #ff7b2b;
+            --neon-glow: #ff3a2f;
+            --stat-bg: #1f1815;
+            --border-dim: #2f2622;
+            --font-title: clamp(2.8rem, 12vw, 6rem);
+            --font-section: clamp(1.8rem, 6vw, 3.2rem);
+        }
+        /* ===== ANIMATIONS ===== */
+        @keyframes glowPulse {
+            0% { opacity: 0.3; transform: scale(0.95); }
+            50% { opacity: 0.9; transform: scale(1.2); }
+            100% { opacity: 0.3; transform: scale(0.95); }
+        }
+        @keyframes diagonalSlide {
+            0% { transform: translateX(-40%) rotate(-12deg); }
+            100% { transform: translateX(60%) rotate(-12deg); }
+        }
+        @keyframes neonFlicker {
+            0%, 100% { opacity: 1; }
+            5% { opacity: 0.7; }
+            10% { opacity: 1; }
+            20% { opacity: 0.85; }
+            30% { opacity: 1; }
+        }
+        @keyframes chipFloat {
+            0% { transform: translateY(0); }
+            60% { transform: translateY(-6px); }
+            100% { transform: translateY(0); }
+        }
+        .animate-glow {
+            animation: glowPulse 3.2s ease-in-out infinite;
+        }
+        /* ===== NAVBAR ===== */
+        header {
+            background: #0d0b0a;
+            padding: 1rem 0;
+            border-bottom: 1px solid #2f2622;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(4px);
+        }
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-brand {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--cream);
+        }
+        .nav-brand span {
+            color: var(--hot-red);
+            margin-left: 0.1rem;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.8rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #c9bfb5;
+            transition: color 0.2s, border-bottom 0.2s;
+            padding-bottom: 0.2rem;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-links a:hover {
+            color: var(--hot-red);
+            border-bottom-color: var(--hot-red);
+        }
+        .nav-cta {
+            background: var(--hot-red);
+            color: #0d0b0a !important;
+            padding: 0.5rem 1.4rem;
+            border-radius: 40px;
+            font-weight: 700;
+            border: none;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .nav-cta:hover {
+            background: var(--orange-burst) !important;
+            transform: scale(1.04);
+            border-bottom: none !important;
+        }
+        /* ===== HERO KINETIC DARK ===== */
+        section[data-lw-section="hero"] {
+            padding: 2.5rem 0 4rem;
+            position: relative;
+            background: radial-gradient(circle at 20% 30%, #1f1512, #0d0b0a 80%);
+            overflow: hidden;
+        }
+        .hero-split {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        .hero-left {
+            flex: 1 1 380px;
+        }
+        .hero-left h1 {
+            font-size: var(--font-title);
+            font-weight: 900;
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -0.03em;
+            color: var(--cream);
+        }
+        .hero-left h1 .line2 {
+            display: block;
+            color: var(--hot-red);
+            text-shadow: 0 0 12px rgba(230, 57, 70, 0.4);
+        }
+        .hero-tagline {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: #c9bfb5;
+            margin: 1.2rem 0 1.8rem;
+            border-left: 4px solid var(--hot-red);
+            padding-left: 1rem;
+            letter-spacing: 0.02em;
+        }
+        .hero-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 2.2rem;
+        }
+        .chip {
+            background: #1f1815;
+            border: 1px solid #3d2d26;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #d4cbc2;
+            transition: all 0.2s;
+        }
+        .chip-accent {
+            background: var(--hot-red);
+            border-color: var(--hot-red);
+            color: #0d0b0a;
+            animation: chipFloat 2.8s ease-in-out infinite;
+        }
+        .chip:hover {
+            border-color: var(--cyan-acid);
+            color: var(--cyan-acid);
+        }
+        .btn-cta {
+            display: inline-block;
+            background: var(--hot-red);
+            color: #0d0b0a;
+            font-weight: 800;
+            font-size: 1.1rem;
+            padding: 0.9rem 2.8rem;
+            border-radius: 60px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+            box-shadow: 0 0 20px rgba(230, 57, 70, 0.3);
+        }
+        .btn-cta:hover {
+            background: var(--orange-burst);
+            transform: scale(1.04);
+            box-shadow: 0 0 32px rgba(255, 123, 43, 0.5);
+        }
+        .hero-right {
+            flex: 1 1 320px;
+            position: relative;
+            min-height: 280px;
+        }
+        .hero-mockup-frame {
+            background: #1a1513;
+            border-radius: 24px;
+            padding: 2rem 1.5rem;
+            border: 1px solid #3d2d26;
+            position: relative;
+            overflow: hidden;
+            min-height: 260px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+        }
+        .mockup-glow {
+            position: absolute;
+            top: -20%;
+            right: -20%;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(230,57,70,0.35), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .mockup-glow-2 {
+            position: absolute;
+            bottom: -10%;
+            left: -10%;
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle, rgba(0,229,200,0.25), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .deco-diagonal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(230,57,70,0.08) 20px, rgba(230,57,70,0.08) 40px);
+            pointer-events: none;
+            animation: diagonalSlide 12s linear infinite;
+        }
+        .mockup-label {
+            background: #0d0b0a;
+            color: var(--cream);
+            padding: 0.5rem 1.4rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 1px solid var(--chocolate-light);
+            display: inline-block;
+            align-self: flex-start;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+            letter-spacing: 0.06em;
+        }
+        /* inline SVG guantes (decorativo) */
+        .hero-mockup-frame::before {
+            content: "🥊";
+            font-size: 4.5rem;
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            opacity: 0.2;
+            transform: rotate(-10deg);
+            filter: drop-shadow(0 0 8px #e63946);
+        }
+        /* ===== STAT STRIP DIAGONAL ===== */
+        .stat-strip {
+            background: #1f1815;
+            padding: 2.2rem 0;
+            border-top: 2px solid var(--hot-red);
+            border-bottom: 2px solid var(--hot-red);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-strip::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -10%;
+            width: 120%;
+            height: 100%;
+            background: repeating-linear-gradient(55deg, transparent, transparent 30px, rgba(230,57,70,0.03) 30px, rgba(230,57,70,0.03) 60px);
+            pointer-events: none;
+        }
+        .stat-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+        .stat-item {
+            text-align: center;
+            flex: 1 0 120px;
+        }
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--hot-red);
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #b8ada3;
+            margin-top: 0.3rem;
+        }
+        /* ===== SECTION PAD ===== */
+        .section-pad {
+            padding: 4.5rem 0;
+        }
+        h2 {
+            font-size: var(--font-section);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            color: var(--cream);
+        }
+        .text-accent {
+            color: var(--hot-red);
+            text-shadow: 0 0 6px rgba(230,57,70,0.3);
+        }
+        .text-cyan {
+            color: var(--cyan-acid);
+        }
+        .text-muted {
+            color: #b8ada3;
+            max-width: 700px;
+            margin-bottom: 2.5rem;
+            font-size: 1.05rem;
+        }
+        /* ===== HORARIO (schedule) ===== */
+        #horario {
+            background: #0d0b0a;
+            border-top: 1px solid #2f2622;
+        }
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0 2.5rem;
+        }
+        .schedule-card {
+            background: #1a1513;
+            border: 1px solid #2f2622;
+            border-radius: 20px;
+            padding: 1.4rem 1rem;
+            transition: border-color 0.2s, transform 0.15s;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.5);
+        }
+        .schedule-card:hover {
+            border-color: var(--hot-red);
+            transform: translateY(-4px);
+        }
+        .schedule-card h4 {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--cream);
+            margin-bottom: 0.6rem;
+            border-left: 3px solid var(--hot-red);
+            padding-left: 0.6rem;
+        }
+        .schedule-card p {
+            color: #c9bfb5;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        /* ===== SERVICIOS BENTO ===== */
+        #servicios {
+            background: #100d0b;
+            border-top: 1px solid #2f2622;
+            border-bottom: 1px solid #2f2622;
+        }
+        .service-bento {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .service-panel {
+            background: #1a1513;
+            border: 1px solid #2f2622;
+            border-radius: 28px;
+            padding: 2rem 1.5rem;
+            transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .service-panel::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -40%;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(230,57,70,0.1), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .service-panel:hover {
+            border-color: var(--cyan-acid);
+            transform: translateY(-6px);
+            box-shadow: 0 16px 28px rgba(0,229,200,0.08);
+        }
+        .service-panel h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--cream);
+            margin-bottom: 0.8rem;
+            letter-spacing: -0.01em;
+        }
+        .service-panel p {
+            color: #b8ada3;
+            font-size: 0.95rem;
+        }
+        /* ===== TESTIMONIAL INMERSIVO ===== */
+        #testimonial {
+            background: #1a1513;
+            padding: 4rem 0;
+            border-top: 2px solid var(--chocolate-light);
+            border-bottom: 2px solid var(--chocolate-light);
+            position: relative;
+        }
+        #testimonial::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(45deg, transparent, transparent 25px, rgba(77,46,27,0.08) 25px, rgba(77,46,27,0.08) 50px);
+            pointer-events: none;
+        }
+        .quote-block {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        .quote-text {
+            font-size: clamp(1.6rem, 5vw, 2.8rem);
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--cream);
+            max-width: 850px;
+            margin: 0 auto 1.5rem;
+            font-style: italic;
+            border-left: 4px solid var(--hot-red);
+            padding-left: 1.5rem;
+            text-align: left;
+        }
+        .quote-author {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--hot-red);
+            letter-spacing: 0.04em;
+        }
+        .quote-detail {
+            color: #b8ada3;
+            margin-top: 1.2rem;
+            font-size: 0.95rem;
+            border-top: 1px solid #2f2622;
+            padding-top: 1.2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        /* ===== TIMELINE ===== */
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.8rem;
+            margin-top: 2.5rem;
+            position: relative;
+        }
+        .timeline-step {
+            background: #1a1513;
+            border: 1px solid #2f2622;
+            border-radius: 30px;
+            padding: 2rem 1.5rem;
+            transition: border-color 0.2s, transform 0.2s;
+            counter-increment: step-counter;
+            position: relative;
+        }
+        .timeline-step::before {
+            content: counter(step-counter);
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--hot-red);
+            color: #0d0b0a;
+            font-weight: 900;
+            font-size: 1.2rem;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 12px rgba(230,57,70,0.5);
+        }
+        .timeline-step h4 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--cream);
+            margin: 0.8rem 0 0.5rem;
+        }
+        .timeline-step p {
+            color: #b8ada3;
+            font-size: 0.9rem;
+        }
+        .timeline-step:hover {
+            border-color: var(--cyan-acid);
+            transform: translateY(-5px);
+        }
+        /* ===== FAQ ===== */
+        #faq {
+            background: #0d0b0a;
+            border-top: 1px solid #2f2622;
+        }
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .faq-item {
+            background: #1a1513;
+            border: 1px solid #2f2622;
+            border-radius: 24px;
+            padding: 1.8rem 1.5rem;
+            transition: border-color 0.2s;
+        }
+        .faq-item h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--cream);
+            margin-bottom: 0.6rem;
+            border-left: 3px solid var(--cyan-acid);
+            padding-left: 0.8rem;
+        }
+        .faq-item p {
+            color: #c9bfb5;
+            font-size: 0.9rem;
+        }
+        .faq-item:hover {
+            border-color: var(--hot-red);
+        }
+        /* ===== FOOTER ===== */
+        footer {
+            background: #0d0b0a;
+            border-top: 2px solid #2f2622;
+            padding: 3rem 0 1.5rem;
+        }
+        .footer-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2.5rem;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+        .footer-brand {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--cream);
+        }
+        .footer-brand span {
+            color: var(--hot-red);
+        }
+        .footer-grid p {
+            color: #b8ada3;
+            margin-top: 0.6rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+        .footer-links strong {
+            color: var(--cream);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.3rem;
+        }
+        .footer-links a {
+            color: #b8ada3;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover {
+            color: var(--hot-red);
+        }
+        .footer-copy {
+            border-top: 1px solid #2f2622;
+            padding-top: 1.5rem;
+            text-align: center;
+            color: #7a6f66;
+            font-size: 0.8rem;
+            letter-spacing: 0.04em;
+        }
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .nav-inner {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            .nav-links {
+                gap: 1rem;
+                justify-content: center;
+            }
+            .hero-split {
+                flex-direction: column;
+            }
+            .hero-left h1 {
+                font-size: clamp(2.4rem, 14vw, 4rem);
+            }
+            .stat-grid {
+                gap: 1rem;
+            }
+            .stat-number {
+                font-size: 2.2rem;
+            }
+            .service-bento {
+                grid-template-columns: 1fr;
+            }
+            .timeline-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 1rem;
+            }
+            .hero-chips {
+                gap: 0.5rem;
+            }
+            .chip {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.9rem;
+            }
+            .btn-cta {
+                padding: 0.7rem 2rem;
+                font-size: 0.95rem;
+            }
+            .schedule-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (min-width: 1024px) {
+            .service-bento {
+                grid-template-columns: 1fr 1fr;
+            }
+            .service-panel:nth-child(3) {
+                grid-column: span 2;
+            }
+        }
+        /* contador timeline */
+        .timeline-grid {
+            counter-reset: step-counter;
+        }
+        /* decoración extra */
+        .deco-line {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--hot-red), var(--cyan-acid), transparent);
+            margin: 2rem 0;
+        }
+    </style>
+<style id="lw-ai-render-safety">
+html,body{width:100%;max-width:100%;min-height:100%;margin:0;overflow-x:hidden}
+body{opacity:1!important;visibility:visible!important}
+main,nav,header,section,footer,[data-lw-section]{width:100%;max-width:100%;position:relative}
+[data-lw-section="hero"],header.hero,.hero,#hero{overflow:hidden}
+[data-lw-section="hero"]>*:not(style),header.hero>*:not(style),.hero>*:not(style),#hero>*:not(style){position:relative;z-index:2}
+nav,header,section,main,footer,h1,h2,h3,h4,p,a,button,article,aside,form,.container,.wrap,[class*="hero"],[class*="content"],[class*="panel"],[class*="card"],[class*="grid"],[class*="text"]{opacity:1!important;visibility:visible!important}
+[class*="animate"],[class*="fade"],[class*="reveal"],[class*="motion"],[data-aos],[style*="opacity:0"],[style*="opacity: 0"]{opacity:1!important;visibility:visible!important}
+@supports not ((background-clip:text) or (-webkit-background-clip:text)){
+  h1,h2,h3,[class*="title"],[class*="headline"]{-webkit-text-fill-color:currentColor!important;background:none!important}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}
+}
+@media (max-width:900px){
+  [data-lw-section="hero"],header.hero,.hero,#hero{min-height:auto!important}
+  .container,.wrap,.lw-wrap{max-width:100%!important}
+}
+</style>
+<style id="lw-ai-import-frame-base">
+html,body{margin:0;padding:0;width:100%;max-width:100%;overflow-x:hidden}
+body{min-width:0}
+*,*::before,*::after{box-sizing:border-box}
+img,video,canvas,svg,iframe{max-width:100%;height:auto}
+nav,header,main,section,article,aside,footer,[data-lw-section]{width:100%;max-width:100%;position:relative}
+[style*="opacity:0"],[style*="opacity: 0"]{opacity:1!important;visibility:visible!important}
+.animate-fade-up,.fade-up,.reveal,.is-hidden,.aos-init,[class*="animate-"],[class*="fade-"],[class*="reveal"]{opacity:1!important;visibility:visible!important}
+[data-lw-section="hero"]>*:not(style),.hero>*:not(style),#hero>*:not(style),header>*:not(style),main>*:not(style){position:relative}
+</style><style id="lw-imported-frame-base">
+html,body{margin:0;padding:0;width:100%;max-width:100%;overflow-x:hidden}
+body{min-width:0}
+*,*::before,*::after{box-sizing:border-box}
+img,video,canvas,svg,iframe{max-width:100%;height:auto}
+nav,header,main,section,article,aside,footer,[data-lw-section]{width:100%;max-width:100%;position:relative}
+[style*="opacity:0"],[style*="opacity: 0"]{opacity:1!important;visibility:visible!important}
+.animate-fade-up,.fade-up,.reveal,.is-hidden,.aos-init,[class*="animate-"],[class*="fade-"],[class*="reveal"]{opacity:1!important;visibility:visible!important}
+[data-lw-section="hero"]>*:not(style),.hero>*:not(style),#hero>*:not(style),header>*:not(style),main>*:not(style){position:relative}
+.lw-import-editable{outline:1px solid transparent;outline-offset:4px;transition:outline-color .16s ease,box-shadow .16s ease}
+.lw-import-editable:hover{outline-color:rgba(37,99,235,.45);cursor:text}
+.lw-import-selected{outline:2px solid #2563eb!important;box-shadow:0 0 0 7px rgba(37,99,235,.14);border-radius:8px}
+.lw-import-selected[contenteditable="true"]{min-width:1em}
+</style><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script></head>
+<body>
+    <header data-lw-section="navbar">
+        <div class="container nav-inner">
+            <div class="nav-brand">Mere<span>Boxing</span></div>
+            <nav class="nav-links">
+                <a href="#horario">horario</a>
+                <a href="#servicios">servicios</a>
+                <a href="#testimonial">experiencia</a>
+                <a href="#faq">faq</a>
+                <a href="#contacto" class="nav-cta">contacto</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- HERO kinetic dark -->
+        <section data-lw-section="hero">
+            <div class="container hero-split">
+                <div class="hero-left">
+                    <h1>MERE<br><span class="line2">BOXING</span></h1>
+                    <div class="hero-tagline">Gimnasio de boxeo en Gijón · potencia, técnica y comunidad</div>
+                    <div class="hero-chips">
+                        <span class="chip chip-accent">clases diarias</span>
+                        <span class="chip">ring profesional</span>
+                        <span class="chip">entreno personal</span>
+                        <span class="chip">sacrificio y gloria</span>
+                    </div>
+                    <a href="#horario" class="btn-cta">ver horario</a>
+                </div>
+                <div class="hero-right">
+                    <div class="hero-mockup-frame">
+                        <div class="mockup-glow animate-glow"></div>
+                        <div class="mockup-glow-2 animate-glow"></div>
+                        <div class="deco-diagonal"></div>
+                        <div class="mockup-label">gijón · asturias</div>
+                        <!-- SVG guantes implícito vía pseudo -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- STAT STRIP diagonal -->
+        <div class="stat-strip" data-lw-section="stats">
+            <div class="container stat-grid">
+                <div class="stat-item"><div class="stat-number">12</div><div class="stat-label">años de academia</div></div>
+                <div class="stat-item"><div class="stat-number">+400</div><div class="stat-label">alumnos activos</div></div>
+                <div class="stat-item"><div class="stat-number">7</div><div class="stat-label">entrenadores</div></div>
+                <div class="stat-item"><div class="stat-number">24/7</div><div class="stat-label">acceso socios</div></div>
+            </div>
+        </div>
+
+        <!-- HORARIO -->
+        <section id="horario" class="section-pad" data-lw-section="schedule">
+            <div class="container">
+                <h2>horario <span class="text-accent">semanal</span></h2>
+                <p class="text-muted">Entrena cada día con horarios flexibles. Todas las clases incluyen calentamiento, técnica y sparring controlado.</p>
+                <div class="schedule-grid">
+                    <div class="schedule-card"><h4>lunes</h4><p>10:00-11:30 · 17:30-19:00<br>19:15-20:45</p></div>
+                    <div class="schedule-card"><h4>martes</h4><p>10:00-11:30 · 17:30-19:00<br>19:15-20:45</p></div>
+                    <div class="schedule-card"><h4>miércoles</h4><p>10:00-11:30 · 17:30-19:00<br>19:15-20:45</p></div>
+                    <div class="schedule-card"><h4>jueves</h4><p>10:00-11:30 · 17:30-19:00<br>19:15-20:45</p></div>
+                    <div class="schedule-card"><h4>viernes</h4><p>10:00-11:30 · 17:30-19:00</p></div>
+                    <div class="schedule-card"><h4>sábado</h4><p>10:00-12:00 · boxeo recreativo</p></div>
+                </div>
+                <div class="deco-line"></div>
+                <p style="color:#c9bfb5; font-weight:500;">+info: clases de prueba gratuita · equipo incluido · reserva tu plaza</p>
+            </div>
+        </section>
+
+        <!-- SERVICIOS BENTO -->
+        <section id="servicios" class="section-pad" data-lw-section="services">
+            <div class="container">
+                <h2>entrenamiento <span class="text-cyan">de élite</span></h2>
+                <div class="service-bento">
+                    <div class="service-panel"><h3>boxeo de competición</h3><p>Preparación para combates amateur y profesionales. Técnica, condición física y estrategia.</p></div>
+                    <div class="service-panel"><h3>cardio box / fitness</h3><p>Quema calorías mientras aprendes golpeo, esquivas y combinaciones. Divertido y exigente.</p></div>
+                    <div class="service-panel"><h3>entrenamiento personal</h3><p>Sesiones one-to-one con nuestros coaches. Enfoque en tu objetivo: perder peso, tonificar o competir.</p></div>
+                    <div class="service-panel"><h3>escuela infantil</h3><p>Boxeo educativo para niños y niñas desde 8 años. Disciplina, respeto y coordinación.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TESTIMONIAL INMERSIVO -->
+        <section id="testimonial" data-lw-section="testimonials">
+            <div class="container quote-block">
+                <div class="quote-text">"Mere Boxing Academy no es solo un gimnasio, es la familia del boxeo en Gijón. Aquí sudas, aprendes y creces."</div>
+                <div class="quote-author">— Carlos Méndez, fundador y head coach</div>
+                <div class="quote-detail">+15 años formando boxeadores · instalaciones con ring oficial, sacos, zona de sombra y área funcional</div>
+            </div>
+        </section>
+
+        <!-- TIMELINE PLAN -->
+        <section class="section-pad" data-lw-section="process">
+            <div class="container">
+                <h2>tu plan de <span class="text-accent">entrada</span></h2>
+                <div class="timeline-grid">
+                    <div class="timeline-step"><h4>visita y conoce</h4><p>Pásate por el gimnasio, prueba una clase gratuita y siente el ambiente.</p></div>
+                    <div class="timeline-step"><h4>elige tu horario</h4><p>Selecciona los días que mejor se adapten a tu rutina.</p></div>
+                    <div class="timeline-step"><h4>equípate</h4><p>Vendas, guantes y protecciones. Nosotros te asesoramos.</p></div>
+                    <div class="timeline-step"><h4>empieza a boxear</h4><p>Entrena con método, mejora cada día y forma parte del club.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq" class="section-pad" data-lw-section="faq">
+            <div class="container">
+                <h2>preguntas <span class="text-cyan">rápidas</span></h2>
+                <div class="faq-grid">
+                    <div class="faq-item"><h4>¿Necesito experiencia previa?</h4><p>No, todas las clases están abiertas a principiantes. Los coaches adaptan los ejercicios.</p></div>
+                    <div class="faq-item"><h4>¿Qué incluye la cuota mensual?</h4><p>Acceso a todas las clases grupales, uso del ring y sacos, y asesoría técnica.</p></div>
+                    <div class="faq-item"><h4>¿Hay vestuarios y duchas?</h4><p>Sí, contamos con vestuarios amplios, taquillas y duchas de agua caliente.</p></div>
+                    <div class="faq-item"><h4>¿Puedo probar antes de pagar?</h4><p>Por supuesto. Primera clase gratuita sin compromiso. Solo trae ropa deportiva.</p></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="contacto" data-lw-section="footer">
+        <div class="container footer-grid">
+            <div>
+                <div class="footer-brand">Mere<span>Boxing</span></div>
+                <p>Calle del Deporte 24, Gijón · asturias<br>tel: 684 123 456 · info@mereboxing.es</p>
+            </div>
+            <div class="footer-links">
+                <strong>horario</strong>
+                <a href="#">lun-vie 10:00-21:00</a>
+                <a href="#">sáb 10:00-14:00</a>
+            </div>
+            <div class="footer-links">
+                <strong>social</strong>
+                <a href="#">instagram</a>
+                <a href="#">facebook</a>
+            </div>
+        </div>
+        <div class="container footer-copy">Mere Boxing Academy · Gijón 2025 · potencia y tradición</div>
+    </footer>
+<script>(function(){
+  window.__LW_IMPORTED_EDITS__ = {"el12":{"text":"VER HORARIO","color":"","backgroundColor":"","fontSize":"17.6px","fontWeight":"800","fontStyle":"normal","textDecoration":"none"},"el8":{"text":"CLASES DIARIAS","color":"#a4ccc6","backgroundColor":"","fontSize":"12.8px","fontWeight":"600","fontStyle":"normal","textDecoration":"none"},"el14":{"text":"SEMANAL","color":"","backgroundColor":"","fontSize":"50.46px","fontWeight":"800","fontStyle":"normal","textDecoration":"none"},"el3":{"text":"EXPERIENCIA","color":"","backgroundColor":"","fontSize":"14.4px","fontWeight":"500","fontStyle":"normal","textDecoration":"none"},"el19":{"text":"10:00-11:30 · 17:30-19:00\n19:15-20:40","color":"","backgroundColor":"","fontSize":"14.4px","fontWeight":"400","fontStyle":"normal","textDecoration":"none"},"el13":{"text":"HORARIO SEMANAL","color":"","backgroundColor":"","fontSize":"50.46px","fontWeight":"800","fontStyle":"normal","textDecoration":"none"},"el7":{"text":"BOXING","color":"#8ca0a6","backgroundColor":"","fontSize":"96px","fontWeight":"900","fontStyle":"italic","textDecoration":"none"},"el59":{"text":"Boxing","color":"","backgroundColor":"","fontSize":"28.8px","fontWeight":"800","fontStyle":"normal","textDecoration":"none"},"el5":{"text":"CONTACTO","color":"","backgroundColor":"","fontSize":"14.4px","fontWeight":"500","fontStyle":"normal","textDecoration":"none"},"el0":{"text":"Boxing","color":"","backgroundColor":"","fontSize":"28.8px","fontWeight":"800","fontStyle":"normal","textDecoration":"none"},"el29":{"text":"DE ÉLITE","color":"","backgroundColor":"","fontSize":"50.46px","fontWeight":"800","fontStyle":"normal","textDecoration":"none"}};
+  var SELECTOR = 'h1,h2,h3,h4,h5,h6,p,a,button,span,li,label,small,strong,em,blockquote,figcaption';
+  function cleanText(text){ return String(text || '').replace(/\s+/g, ' ').trim(); }
+  function directText(el){
+    try {
+      return Array.prototype.slice.call(el.childNodes || []).filter(function(n){ return n && n.nodeType === 3; }).map(function(n){ return n.nodeValue || ''; }).join(' ');
+    } catch(_err) { return ''; }
+  }
+  function candidates(){
+    var raw = Array.prototype.slice.call(document.querySelectorAll(SELECTOR)).filter(function(el){
+      if(!el || el.closest('script,style,noscript,svg,[data-lw-import-ignore]')) return false;
+      var txt = cleanText(el.innerText || el.textContent || '');
+      if(!txt || txt.length > 1800) return false;
+      return true;
+    });
+    return raw.filter(function(el){
+      var direct = cleanText(directText(el));
+      if(direct.length >= 2) return true;
+      return !raw.some(function(other){ return other !== el && el.contains(other); });
+    });
+  }
+  function applyTo(el, st){
+    if(!el || !st) return;
+    if(typeof st.text === 'string') el.textContent = st.text;
+    if(st.color) el.style.color = st.color;
+    if(st.backgroundColor) el.style.backgroundColor = st.backgroundColor;
+    if(st.fontSize) el.style.fontSize = st.fontSize;
+    if(st.fontWeight) el.style.fontWeight = st.fontWeight;
+    if(st.fontStyle) el.style.fontStyle = st.fontStyle;
+    if(st.textDecoration) el.style.textDecoration = st.textDecoration;
+  }
+  function boot(){
+    var edits = window.__LW_IMPORTED_EDITS__ || {};
+    candidates().forEach(function(el, idx){
+      var key = 'el' + idx;
+      el.setAttribute('data-lw-import-key', key);
+      if(edits[key]) applyTo(el, edits[key]);
+    });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once:true });
+  else boot();
+})();</script></body>
+</html>
